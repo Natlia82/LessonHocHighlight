@@ -1,5 +1,22 @@
 import React, { useState } from 'react';
 
+function HocNew(component) {
+    return function(props) {
+           return (
+            props.views < 101 ?  
+            <New>
+               {component.apply(this, [props])}
+            </New>: 
+            <Popular>
+            {component.apply(this, [props])}
+           </Popular>
+           )
+    }
+}
+
+const ComponentHocVideo = HocNew(Video);
+const ComponentHocArticle = HocNew(Article);
+
 function New(props) {
     return (
         <div className="wrap-item wrap-item-new">
@@ -41,12 +58,12 @@ function List(props) {
         switch (item.type) {
             case 'video':
                 return (
-                    <Video {...item} />
+                    <ComponentHocVideo {...item} />
                 );
 
             case 'article':
                 return (
-                    <Article {...item} />
+                    <ComponentHocArticle {...item} />
                 );
         }
     });
